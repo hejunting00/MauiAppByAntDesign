@@ -215,6 +215,19 @@
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
+    <script>
+        function adjustVideoSize() {
+            var video = document.getElementById('bgVideo');
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            video.style.width = windowWidth + 'px';
+            video.style.height = windowHeight + 'px';
+        }
+    </script>
 </body>
 
 </html>
+
+
+

@@ -1,0 +1,87 @@
+﻿@page "/ngService"
+
+<Title Level="2">NG电芯替换</Title>
+<Divider />
+<Space Direction="DirectionVHType.Vertical" Size="@($"10")" Style="width:100%">
+    <SpaceItem>
+        <Search Placeholder="请输入托盘条码" Size="@InputSize.Large" EnterButton="@("获取托盘信息")" @bind-Value="@barcode" OnSearch="OnSearch" />
+    </SpaceItem>
+    <br />
+
+    @if (barcodeInfos.Count > 0)
+    {
+        <SpaceItem>
+            <Table TItem="BarcodeInfoDto" DataSource="@barcodeInfos" OnRowClick="OnRowClick" PaginationPosition="none">
+                <PropertyColumn Property="c=>c.ItemPosition">@context.ItemPosition</PropertyColumn>
+                    <PropertyColumn Property="c=>c.Itemcode">
+                        <Input @oninput="(e)=>HandleBarcodeInput(e,context)" Value="@context.Itemcode" />
+                    </PropertyColumn>
+                    <PropertyColumn Property="c=>c.NgCode">
+                        <Tag PresetColor="AntDesign.PresetColor.Red">@context.NgCode</Tag>
+                    </PropertyColumn>
+                </Table>
+        </SpaceItem>
+        <SpaceItem>
+            <div id="button-block-demo">
+                <Button Type="@ButtonType.Primary" Block OnClick="SubmitNG">替换NG电池</Button>
+            </div>
+        </SpaceItem>
+    }
+
+</Space>
+
+
+@using static NTI_NG_MAUI.Models.Dto
+@inject IMessageService message
+
+@code {
+    private string barcode { get; set; }
+    private List<BarcodeInfoDto> barcodeInfos = new();
+    private bool loading;
+    //搜索按钮
+    private bool search=false;
+    //提交按钮
+    private bool submit=false;
+
+
+    public async Task OnSearch()
+    {
+        if (search) return;
+        search = true;
+        barcodeInfos.Clear();        
+        await message.Loading($"正在获取 {barcode} 的NG电芯数据", 2);
+        barcodeInfos.Add(new BarcodeInfoDto("QH88888", "05C@&*@&&*#&", 2, "1", "sys()", "QC"));
+        search = false;
+    }
+
+    private async Task OnEnter(KeyboardEventArgs e)
+    {
+        Console.WriteLine("Enter pressed");
+        loading = true;
+        await Task.Delay(1000);
+        loading = false;
+    }
+
+    private void OnRowClick()
+    {
+
+    }
+
+    private void HandleBarcodeInput(ChangeEventArgs e, BarcodeInfoDto item)
+    {
+        string itemcode = e.Value.ToString();
+
+        // 更新每个对象的 itemcode 属性
+        item.Itemcode = itemcode.ToString();
+    }
+
+    private void SubmitNG()
+    {
+        if (submit) return;
+        submit = true;
+        // 提交的代码
+        if(barcodeInfos.Count==0)return;
+        submit = false;
+    }    
+}
+

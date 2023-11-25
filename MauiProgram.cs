@@ -34,11 +34,11 @@ namespace MauiAppByAntDesign
                 settings.PrimaryColor = "daybreak";
                 settings.ColorWeak = false;
                 settings.SplitMenus = false;
-                settings.HeaderRender = true;
-                settings.FooterRender = false;
+                settings.HeaderRender = false;
+                settings.FooterRender = true;
                 settings.MenuRender = true;
                 settings.MenuHeaderRender = true;
-                settings.HeaderHeight = 48;                                
+                settings.HeaderHeight = 48;                     
             });
 
 

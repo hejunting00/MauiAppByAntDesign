@@ -1,0 +1,95 @@
+﻿@page "/login"
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Threading.Tasks
+
+<div class="video-container">
+    <video autoplay loop muted @onresize="AdjustVideoSize">
+        <source src="/loginBg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<div class="content-bg">
+    <Card Style="width: 300px; margin-top: 16px" Class="content">
+        <Body>
+            <Image Src="/logo.png" Preview="false" />
+            <br/>
+            <br />
+        </Body>
+        <ChildContent>            
+            <Space Direction="DirectionVHType.Vertical" Size="@($"15")" Style="width:100%">
+                <SpaceItem>
+                    <Input Placeholder="large size" Type="text" Size="@InputSize.Large" @bind-Value="@username">
+                        <Prefix>
+                            <Icon Type="user" />
+                        </Prefix>
+                    </Input>
+                </SpaceItem>
+                <SpaceItem>
+                    <Input Placeholder="large size" Type="password" Size="@InputSize.Large" @bind-Value="@password">
+                        <Prefix>
+                            <Icon Type="font-colors" />
+                        </Prefix>
+                    </Input>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Login" Size="@ButtonSize.Large" Shape="@ButtonShape.Round">登录</Button>
+                </SpaceItem>
+            </Space>
+        </ChildContent>
+    </Card>
+</div>
+
+<style>
+    .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .content-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color:white;
+        z-index: 1;     
+        border-radius: 10%;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .content{
+        width:100%;
+        height:100%;
+        color:white;
+        border-radius: 10%;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+
+
+@code {
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private async Task AdjustVideoSize()
+    {
+        await JSRuntime.InvokeVoidAsync("adjustVideoSize");
+    }
+
+    private string username;
+    private string password;
+
+}

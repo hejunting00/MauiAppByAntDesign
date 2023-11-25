@@ -1,17 +1,25 @@
 ﻿@using AntDesign.ProLayout
+@using NTI_NG_MAUI.Data
 @inherits LayoutComponentBase
 
-<AntDesign.ProLayout.BasicLayout Logo="@("/logo.png")" 
-                                 MenuData="MenuData">
-    <ChildContent>
-        @Body
-    </ChildContent>
-    <FooterRender>
-        <FooterView Copyright="MauiBlazorApp" Links="Links"></FooterView>
-    </FooterRender>
-</AntDesign.ProLayout.BasicLayout>
+@if(StaticMap.userName == "")
+{
+    <MauiAppByAntDesign.Components.Pages.Login />
+}
+else
+{
+    <AntDesign.ProLayout.BasicLayout Logo="@("/logo.png")" SiderWidth="210"
+                                     MenuData="MenuData">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <FooterRender>
+            <FooterView Copyright="MauiBlazorApp" Links="Links"></FooterView>
+        </FooterRender>
+    </AntDesign.ProLayout.BasicLayout>
 
-<SettingDrawer HideCopyButton="false"  />
+    <SettingDrawer HideCopyButton="false" />
+}
 
 @code
 {
@@ -20,23 +28,24 @@
         new MenuDataItem
         {
             Path = "/",
-            Name = "Home",
+            Name = "首页",
             Key = "Home",
             Icon = "home"
         },
         new MenuDataItem
         {
-            Path = "/Counter",
-            Name = "Counter",
-            Key = "Counter",
-            Icon = "plus"
+            Path = "/ngService",
+            Name = "NG处理",
+            Key = "ngService",
+            Icon = "form"
         },
         new MenuDataItem
         {
-            Path = "/FetchData",
-            Name = "FetchData",
-            Key = "FetchData",
-            Icon = "cloud"
+            Path = "/log",
+            Name = "日志",
+            Key = "log",
+            Icon = "cloud",
+            HideInMenu = true
         }
     };
     private readonly LinkItem[] Links =
