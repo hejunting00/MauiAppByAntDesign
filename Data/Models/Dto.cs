@@ -21,7 +21,7 @@ namespace NTI_NG_MAUI.Models
                 this.itemcode = itemcode;
                 this.itemPosition = itemPosition;
                 NgStatus = ngStatus;
-                ngCode = ngCode;
+                this.ngCode = ngCode;
                 this.tId = tId;
             }
 
@@ -30,7 +30,7 @@ namespace NTI_NG_MAUI.Models
             public int ItemPosition { get => itemPosition; set => itemPosition = value; }
             public string NgStatus1 { get => NgStatus; set => NgStatus = value; }
             public string TID { get => tId; set => tId = value; }
-            public string NgCode { get => NgCode; set => ngCode = value; }
+            public string NgCode { get => ngCode; set => ngCode = value; }
         }
         public record NgResultDto(string itemBarcode, string hcResult, string statusHc, string field2, string field3, string status_ocv1, string status_ocv2, string dciRng, string zoneCode,string tId);
         public record NgBarcodePosition(string barcode, string position);
