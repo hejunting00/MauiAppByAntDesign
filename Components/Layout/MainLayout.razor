@@ -1,0 +1,52 @@
+﻿@using AntDesign.ProLayout
+@inherits LayoutComponentBase
+
+<AntDesign.ProLayout.BasicLayout Logo="@("/logo.png")" 
+                                 MenuData="MenuData">
+    <ChildContent>
+        @Body
+    </ChildContent>
+    <FooterRender>
+        <FooterView Copyright="MauiBlazorApp" Links="Links"></FooterView>
+    </FooterRender>
+</AntDesign.ProLayout.BasicLayout>
+
+<SettingDrawer HideCopyButton="false"  />
+
+@code
+{
+    private readonly MenuDataItem[] MenuData =
+        {
+        new MenuDataItem
+        {
+            Path = "/",
+            Name = "Home",
+            Key = "Home",
+            Icon = "home"
+        },
+        new MenuDataItem
+        {
+            Path = "/Counter",
+            Name = "Counter",
+            Key = "Counter",
+            Icon = "plus"
+        },
+        new MenuDataItem
+        {
+            Path = "/FetchData",
+            Name = "FetchData",
+            Key = "FetchData",
+            Icon = "cloud"
+        }
+    };
+    private readonly LinkItem[] Links =
+    {
+        new LinkItem
+        {
+            Key = "今天国际",
+            Title = "NG系统",
+            Href = "https://antblazor.com",
+            BlankTarget = true
+        }
+    };
+}
