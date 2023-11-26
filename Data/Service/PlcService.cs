@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NTI_NG_MAUI.Models.Dto;
+using static MauiAppByAntDesign.Models.Dto;
 
 namespace MauiAppByAntDesign.Data.Service
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NTI_NG_MAUI.Models
+namespace MauiAppByAntDesign.Models
 {
     public class LoginModel
     {

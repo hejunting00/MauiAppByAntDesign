@@ -1,4 +1,6 @@
 ﻿@page "/ngService"
+@using MauiAppByAntDesign.Data.Service
+
 
 <Title Level="2">NG电芯替换</Title>
 <Divider />
@@ -31,11 +33,13 @@
 </Space>
 
 
-@using static NTI_NG_MAUI.Models.Dto
+
 @inject IMessageService message
+@inject NgTaskService ngService
 
 @code {
-    private string barcode { get; set; }
+    private string barcode = "";
+
     private List<BarcodeInfoDto> barcodeInfos = new();
     private bool loading;
     //搜索按钮
@@ -46,11 +50,16 @@
 
     public async Task OnSearch()
     {
+        if (barcode == "")
+        {
+            await message.Warning("请输入托盘条码");
+            return;
+        }
         if (search) return;
         search = true;
         barcodeInfos.Clear();        
         await message.Loading($"正在获取 {barcode} 的NG电芯数据", 2);
-        barcodeInfos.Add(new BarcodeInfoDto("QH88888", "05C@&*@&&*#&", 2, "1", "sys()", "QC"));
+        barcodeInfos = await ngService.GetBarcodeInfos(barcode);
         search = false;
     }
 

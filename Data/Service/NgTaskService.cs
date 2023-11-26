@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NTI_NG_MAUI.Models.Dto;
+using static MauiAppByAntDesign.Models.Dto;
 
 namespace MauiAppByAntDesign.Data.Service
 {
@@ -37,35 +37,29 @@ namespace MauiAppByAntDesign.Data.Service
 
         public Task<int> updateBarcodeInfo(List<BarcodeInfoDto> list)
         {
-            string barcode = list.FirstOrDefault().Barcode;
-            string[] strings = list.Select(t => t.ItemPosition.ToString()).ToArray();
+            string barcode = list.FirstOrDefault()?.Barcode;
 
-            // 查询数据库以获取匹配的 itemdetail 数据
-            List<Itemdetail> itemDetails = modelContext.Itemdetails
-                .Where(item => item.Containerbarcode == barcode && strings.Contains(item.Itemposition))
-                .OrderBy(item => item.Itemposition)
-                .ToList();
-
-            // 根据 barcodeInfoDtos 更新 itemDetailsToUpdate
-            foreach (Itemdetail itemDetail in itemDetails)
+            if (barcode == null)
             {
-                BarcodeInfoDto matchingDto = list.FirstOrDefault(dto => dto.Barcode == itemDetail.Containerbarcode && dto.ItemPosition == int.Parse(itemDetail.Itemposition));
-
-                if (matchingDto != null)
-                {
-                    // 更新 itemDetail 数据
-                    // 例如，如果有其他属性需要更新，也在这里进行更新
-                    // itemDetail.SomeProperty = matchingDto.SomeProperty;
-
-                    // 保存更改
-                    itemDetail.Itembarcode = matchingDto.Itemcode;
-                    modelContext.Database.ExecuteSqlRaw("update itemdetail t set t.itembarcode=" + matchingDto.Itemcode + " where t.containerbarcode=" + itemDetail.Containerbarcode + " and t.itemposition=" + itemDetail.Itemposition + "");
-
-                    modelContext.SaveChanges();
-                }
+                return Task.FromResult(0); // 或抛出异常、记录错误等。
             }
-            int v = 1;
-            return Task.FromResult(v);
+            try
+            {
+                List<string> ngTid = list.Select(t => t.TID).ToList();
+                List<Itemdetail> itemdetails = modelContext.Itemdetails.Where(t => t.Containerbarcode.Equals(barcode)).ToList();
+
+                foreach (string item in ngTid)
+                {
+                    Itemdetail itemdetail = itemdetails.FirstOrDefault(t => t.TId.Equals(item));
+                    itemdetail.Itembarcode = list.FirstOrDefault(t => t.TID.Equals(item)).Itemcode;
+                }
+                //modelContext.Itemdetails.UpdateRange(barcodeInfoDtos);            
+                return Task.FromResult(modelContext.SaveChangesAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(0);
+            }
         }
 
         private void filteringFailedCellsByRegion(List<NgResultDto> ngResultDtos, ref List<BarcodeInfoDto> barcodeInfoDtos, string barcode)

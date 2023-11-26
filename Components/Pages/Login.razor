@@ -1,7 +1,12 @@
 ﻿@page "/login"
 @inherits LayoutComponentBase
+@using MauiAppByAntDesign.Data.Service
 @using Microsoft.AspNetCore.Components.Forms
 @using System.Threading.Tasks
+
+@inject NotificationService _notice
+
+@inject UserService userService
 
 <div class="video-container">
     <video autoplay loop muted @onresize="AdjustVideoSize">
@@ -14,27 +19,27 @@
     <Card Style="width: 300px; margin-top: 16px" Class="content">
         <Body>
             <Image Src="/logo.png" Preview="false" />
-            <br/>
+            <br />
             <br />
         </Body>
-        <ChildContent>            
+        <ChildContent>
             <Space Direction="DirectionVHType.Vertical" Size="@($"15")" Style="width:100%">
                 <SpaceItem>
                     <Input Placeholder="large size" Type="text" Size="@InputSize.Large" @bind-Value="@username">
-                        <Prefix>
-                            <Icon Type="user" />
-                        </Prefix>
+                    <Prefix>
+                        <Icon Type="user" />
+                    </Prefix>
                     </Input>
                 </SpaceItem>
                 <SpaceItem>
                     <Input Placeholder="large size" Type="password" Size="@InputSize.Large" @bind-Value="@password">
-                        <Prefix>
-                            <Icon Type="font-colors" />
-                        </Prefix>
+                    <Prefix>
+                        <Icon Type="font-colors" />
+                    </Prefix>
                     </Input>
                 </SpaceItem>
                 <SpaceItem>
-                    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Login" Size="@ButtonSize.Large" Shape="@ButtonShape.Round">登录</Button>
+                    <Button OnClick="Logins" Type="@ButtonType.Primary" Icon="@IconType.Outline.Login" Size="@ButtonSize.Large" Shape="@ButtonShape.Round">登录</Button>
                 </SpaceItem>
             </Space>
         </ChildContent>
@@ -64,16 +69,16 @@
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
-        color:white;
-        z-index: 1;     
+        color: white;
+        z-index: 1;
         border-radius: 10%;
         background-color: rgba(255, 255, 255, 0.1);
     }
 
-    .content{
-        width:100%;
-        height:100%;
-        color:white;
+    .content {
+        width: 100%;
+        height: 100%;
+        color: white;
         border-radius: 10%;
         background-color: rgba(255, 255, 255, 0.2);
     }
@@ -89,10 +94,22 @@
         await JSRuntime.InvokeVoidAsync("adjustVideoSize");
     }
 
-    private string username;
-    private string password;
+    private string username = "";
+    private string password = "";
 
-    public void Logins(){
-
+    public async void Logins()
+    {
+        if (username == "" || password == "")
+        {
+            RenderFragment customIcon = @<Icon Type="exclamation-circle" Theme="outline" Style="color:red;"></Icon>;
+            await _notice.Open(new NotificationConfig()
+                {
+                    Message = "登录失败",
+                    Description = "必须输入账号密码",
+                    Icon = customIcon,
+                    Duration = 3,
+                });
+        }
+        userService.Login(username, password);
     }
 }
