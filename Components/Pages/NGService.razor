@@ -1,5 +1,6 @@
 ﻿@page "/ngService"
 @using MauiAppByAntDesign.Data.Service
+@using static MauiAppByAntDesign.Models.Dto;
 
 
 <Title Level="2">NG电芯替换</Title>
@@ -84,12 +85,23 @@
         item.Itemcode = itemcode.ToString();
     }
 
-    private void SubmitNG()
+    private async void SubmitNG()
     {
         if (submit) return;
         submit = true;
-        // 提交的代码
+        // 提交的代码        
         if(barcodeInfos.Count==0)return;
+        int result = await ngService.updateBarcodeInfo(barcodeInfos);
+        if (result > 0)
+        {
+            await message.Success($"{barcode} 的NG电芯数据更新成功", 2);
+            barcodeInfos.Clear();
+            return;
+        }
+        else
+        {
+            await message.Warning($"{barcode} 的NG电芯数据更新失败", 4);
+        }
         submit = false;
     }    
 }
